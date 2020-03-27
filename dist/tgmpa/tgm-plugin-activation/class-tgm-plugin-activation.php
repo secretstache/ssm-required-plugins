@@ -2106,11 +2106,9 @@ if ( ! class_exists( 'TGM_Plugin_Activation' ) ) {
 		}
 	}
 
-	if ( function_exists('plugins_loaded') && did_action( 'plugins_loaded' ) ) {
-		load_tgm_plugin_activation();
-	} else {
-		add_action( 'plugins_loaded', 'load_tgm_plugin_activation' );
-	}
+
+	add_action( 'plugins_loaded', 'load_tgm_plugin_activation' );
+	
 }
 
 if ( ! function_exists( 'tgmpa' ) ) {
