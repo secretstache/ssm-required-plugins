@@ -1,0 +1,35 @@
+{
+    "name": "ssm/required-plugins",
+    "type": "package",
+    "license": "MIT",
+    "description": "Custom class to enable plugin activation using a JSON, YAML or PHP file",
+    "homepage": "https://www.secretstache.com/",
+    "authors": [
+        {
+            "name": "Rich Staats",
+            "email": "rich@secretstache.com"
+        },
+        {
+            "name": "Alexander Smulsky",
+            "email": "alex@secretstache.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "hassankhan/config": "^1.0",
+        "tgmpa/tgm-plugin-activation": "^2.6.1"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "SSM\\RequiredPlugins\\": "src/"
+        }
+    },
+    "scripts": {
+        "test": [
+            "vendor/bin/phpcs --extensions=php --ignore=vendor/ ."
+        ]
+    }
+}
