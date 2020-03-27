@@ -16,7 +16,8 @@
     ],
     "require": {
         "php": ">=7.1",
-        "hassankhan/config": "^1.0"
+        "hassankhan/config": "^1.0",
+        "composer/installers": "~1.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.*"

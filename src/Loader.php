@@ -83,6 +83,6 @@ class Loader
      */
     protected function run($config)
     {
-        (new Bundle($config));
+        (new RequiredPlugins($config));
     }
 }
