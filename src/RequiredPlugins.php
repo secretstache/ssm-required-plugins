@@ -1,58 +1,95 @@
 <?php
 
-namespace SSM\RequiredPlugins;
+namespace SSM;
 
+use Noodlehaus\Config;
+use SSM\RequiredPlugins\ConfigNoFile;
+use SSM\RequiredPlugins\Core;
+use SSM\RequiredPlugins\Bundle;
+
+/**
+ * Required Plugins
+ */
 class RequiredPlugins
 {
-    protected $data;
 
-    public function __construct($data)
+    protected $file;
+    protected $defaultFile;
+    protected $config;
+
+    public function setup()
     {
-        $this->data = $data;
-
-        if ($this->isDisabled()) {
-            return;
-        }
-
-        $this->config();
-        $this->register();
+        $this->lib = new Core();
+        $this->getFile();
+        $this->load();
     }
 
     /**
-     * Check to see if config has been disabled
+     * Get file
+     */
+    protected function getFile()
+    {
+        $this->file = (has_filter('ssm/required_plugins/config_path') ? apply_filters('ssm/required_plugins/config_path', $this->file) : $this->getDefaultFile());
+    }
+
+    /**
+     * Get default file format
+     */
+    protected function getDefaultFile()
+    {
+        $result = glob(get_stylesheet_directory() . '/bundle.*');
+        $result = empty($result) ? : $result[0];
+        
+        return $result;
+    }
+
+    /**
+     * Load
+     */
+    protected function load()
+    {
+        if (!file_exists($this->file)) return;
+        if (!$this->isFileSupported()) return;
+        $this->config = new Config($this->file);
+        ($this->isMultiple() ? $this->loadEach() : $this->run($this->config));
+    }
+
+    /**
+     * Is file supported
      *
      * @return boolean
      */
-    protected function isDisabled()
+    protected function isFileSupported()
     {
-        return (($this->data['active'] === false) ? true : false);
+        return in_array(pathinfo($this->file, PATHINFO_EXTENSION), ['json', 'yaml', 'yml', 'php']);
     }
 
     /**
-     * Config
+     * Is multidimensional config
      *
-     * Required config for tgmpa()
-     * @return $this
+     * @return boolean
      */
-    protected function config()
+    protected function isMultiple()
     {
-        $this->config = [
-            'id' => 'sober',
-            'menu' => 'install-plugins',
-            'parent_slug' => 'plugins.php',
-            'is_automatic' => true
-        ];
+        return (is_array(current($this->config->all())));
     }
 
     /**
-     * Register
-     *
-     * Hook into tgmpa_register and run function
+     * Load each from multidimensional config
      */
-    protected function register() 
-    {
-        add_action('tgmpa_register', function () {
-            tgmpa(array($this->data->all()), $this->config);
-        });
+    protected function loadEach()
+    {   
+        foreach ($this->config as $config) {
+            $this->run(new ConfigNoFile($config));
+        }
     }
+
+    /**
+     * Run
+     */
+    protected function run($config)
+    {
+        (new Bundle($config));
+    }
+    
 }
