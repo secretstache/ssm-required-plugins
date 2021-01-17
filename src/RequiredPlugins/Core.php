@@ -12,7 +12,7 @@ class Core {
 	 *
 	 * @const string Version number.
 	 */
-	const CORE_VERSION = '2.6.1';
+	const CORE_VERSION = '1.0';
 
 	/**
 	 * Regular expression to test if a URL is a WP plugin repo URL.
@@ -1167,7 +1167,7 @@ class Core {
 					unset( $plugin_slug );
 
 					$count          = count( $plugin_group );
-					$linked_plugins = array_map( array( 'TGMPA_Utils', 'wrap_in_em' ), $linked_plugins );
+					$linked_plugins = array_map( array( 'SSM\RequiredPlugins\TGMPA_Utils', 'wrap_in_em' ), $linked_plugins );
 					$last_plugin    = array_pop( $linked_plugins ); // Pop off last name to prep for readability.
 					$imploded       = empty( $linked_plugins ) ? $last_plugin : ( implode( ', ', $linked_plugins ) . ' ' . esc_html_x( 'and', 'plugin A *and* plugin B', 'tgmpa' ) . ' ' . $last_plugin );
 
@@ -2030,7 +2030,7 @@ class Core {
 			esc_html(
 				sprintf(
 					/* translators: %s: version number */
-					__( 'TGMPA v%s', 'tgmpa' ),
+					__( 'SSM Required Plugins v%s', 'tgmpa' ),
 					self::CORE_VERSION
 				)
 			),
